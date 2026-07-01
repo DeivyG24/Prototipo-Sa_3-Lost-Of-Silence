@@ -1,0 +1,2 @@
+C:\Users\deivy_guzman\LOST OF SILENCE\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\deivy_guzman\LOST OF SILENCE\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

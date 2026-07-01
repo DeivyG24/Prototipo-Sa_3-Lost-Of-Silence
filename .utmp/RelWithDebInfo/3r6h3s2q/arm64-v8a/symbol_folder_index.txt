@@ -1,0 +1,1 @@
+C:\Users\deivy_guzman\LOST OF SILENCE\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\3r6h3s2q\obj\arm64-v8a

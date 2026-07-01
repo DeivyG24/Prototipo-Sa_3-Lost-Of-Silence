@@ -1,0 +1,10 @@
+# ninja log v5
+37	1544	8033433225613723	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	e640b905dcb93482
+46	1554	8033433225699078	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	83dce02b4cbe2567
+21	1575	8033433226067385	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c974dc9c77eeac63
+65	1580	8033433226097618	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	30f9d1e36fadc2b2
+9	1636	8033433226668529	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	6a42828341609ed6
+57	1815	8033433228494448	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	fdd7c5a0b1238dda
+29	1849	8033433228794444	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	81d83a33a4856024
+1	1958	8033433229888685	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7ff853e4b1cdcf3b
+1958	2108	8033433231404639	C:/Users/deivy_guzman/LOST OF SILENCE/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3r6h3s2q/obj/arm64-v8a/libgame.so	5d5892e7caf4e377
