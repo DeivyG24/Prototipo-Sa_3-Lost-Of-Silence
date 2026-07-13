@@ -46,8 +46,10 @@ namespace LostOfSilence
             target.z = Mathf.Clamp(target.z, zBounds.x, zBounds.y);
 
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+
             Vector3 look = player.transform.position - transform.position;
             look.y = 0f;
+
             if (look.sqrMagnitude > 0.01f)
             {
                 transform.rotation = Quaternion.LookRotation(look.normalized, Vector3.up);
@@ -61,12 +63,13 @@ namespace LostOfSilence
 
         private bool IsPlayerOnSameFloor()
         {
-            return player.transform.position.y > 2.2f && player.transform.position.y < 4.2f;
+            return player.transform.position.y > 249f && player.transform.position.y < 253f;
         }
 
         private bool IsBeingWatched()
         {
             Vector3 toEnemy = transform.position + Vector3.up * 1.2f - playerCamera.transform.position;
+
             if (toEnemy.magnitude > 12f)
             {
                 return false;
