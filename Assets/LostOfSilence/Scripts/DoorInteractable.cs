@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace LostOfSilence
 {
+    [RequireComponent(typeof(AudioSource))]
     public sealed class DoorInteractable : MonoBehaviour, IInteractable
     {
+        [Header("Porta")]
         [SerializeField] private Transform hinge;
         [SerializeField] private bool requiresBedroomKey;
         [SerializeField] private ColoredKey requiredColoredKey;
@@ -15,6 +17,11 @@ namespace LostOfSilence
         [SerializeField] private float openAngle = 95f;
         [SerializeField] private float openSpeed = 4f;
 
+        [Header("Som da Porta")]
+        [SerializeField] private AudioClip doorOpenSound;
+        [SerializeField, Range(0f, 1f)] private float doorVolume = 0.5f;
+
+        private AudioSource audioSource;
         private bool open;
         private bool locked;
         private Coroutine moveRoutine;
@@ -27,7 +34,9 @@ namespace LostOfSilence
                 {
                     if (GameManager.Instance != null)
                     {
-                        return GameManager.Instance.Localize(requiresBedroomKey ? "prompt_use_key" : "prompt_locked");
+                        return GameManager.Instance.Localize(
+                            requiresBedroomKey ? "prompt_use_key" : "prompt_locked"
+                        );
                     }
 
                     return requiresBedroomKey ? "E - Usar chave" : "Trancada";
@@ -35,7 +44,9 @@ namespace LostOfSilence
 
                 if (GameManager.Instance != null)
                 {
-                    return GameManager.Instance.Localize(open ? "prompt_close" : "prompt_open");
+                    return GameManager.Instance.Localize(
+                        open ? "prompt_close" : "prompt_open"
+                    );
                 }
 
                 return open ? "E - Fechar porta" : "E - Abrir porta";
@@ -50,6 +61,12 @@ namespace LostOfSilence
             }
 
             locked = startsLocked;
+
+            audioSource = GetComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.loop = false;
+            audioSource.spatialBlend = 1f;
+            audioSource.volume = doorVolume;
         }
 
         public void Unlock()
@@ -61,25 +78,42 @@ namespace LostOfSilence
         {
             if (locked)
             {
-                if (requiresBedroomKey && GameManager.Instance != null && GameManager.Instance.HasBedroomKey)
+                if (requiresBedroomKey &&
+                    GameManager.Instance != null &&
+                    GameManager.Instance.HasBedroomKey)
                 {
                     locked = false;
-                    GameManager.Instance.ShowMessage(GameManager.Instance.Localize("door_unlocked"));
+                    GameManager.Instance.ShowMessage(
+                        GameManager.Instance.Localize("door_unlocked")
+                    );
                 }
-                else if (requiresPower && GameManager.Instance != null && GameManager.Instance.IsPowerRestored)
+                else if (requiresPower &&
+                         GameManager.Instance != null &&
+                         GameManager.Instance.IsPowerRestored)
                 {
                     locked = false;
-                    GameManager.Instance.ShowMessage(GameManager.Instance.Localize("door_unlocked"));
+                    GameManager.Instance.ShowMessage(
+                        GameManager.Instance.Localize("door_unlocked")
+                    );
                 }
-                else if (requiresAllColoredKeys && GameManager.Instance != null && GameManager.Instance.HasAllColoredKeys && GameManager.Instance.HasSolvedAllPuzzles)
+                else if (requiresAllColoredKeys &&
+                         GameManager.Instance != null &&
+                         GameManager.Instance.HasAllColoredKeys &&
+                         GameManager.Instance.HasSolvedAllPuzzles)
                 {
                     locked = false;
-                    GameManager.Instance.ShowMessage(GameManager.Instance.Localize("door_unlocked"));
+                    GameManager.Instance.ShowMessage(
+                        GameManager.Instance.Localize("door_unlocked")
+                    );
                 }
-                else if (requiredColoredKey != ColoredKey.None && GameManager.Instance != null && GameManager.Instance.HasColoredKey(requiredColoredKey))
+                else if (requiredColoredKey != ColoredKey.None &&
+                         GameManager.Instance != null &&
+                         GameManager.Instance.HasColoredKey(requiredColoredKey))
                 {
                     locked = false;
-                    GameManager.Instance.ShowMessage(GameManager.Instance.Localize("door_unlocked"));
+                    GameManager.Instance.ShowMessage(
+                        GameManager.Instance.Localize("door_unlocked")
+                    );
                 }
                 else
                 {
@@ -93,6 +127,13 @@ namespace LostOfSilence
             }
 
             open = !open;
+
+            // Toca o áudio somente quando a porta começa a abrir.
+            if (open && doorOpenSound != null)
+            {
+                audioSource.PlayOneShot(doorOpenSound, doorVolume);
+            }
+
             if (moveRoutine != null)
             {
                 StopCoroutine(moveRoutine);
@@ -104,7 +145,12 @@ namespace LostOfSilence
         private IEnumerator RotateDoor(bool opening)
         {
             Quaternion start = hinge.localRotation;
-            Quaternion target = Quaternion.Euler(0f, opening ? openAngle : 0f, 0f);
+            Quaternion target = Quaternion.Euler(
+                0f,
+                opening ? openAngle : 0f,
+                0f
+            );
+
             float t = 0f;
 
             while (t < 1f)

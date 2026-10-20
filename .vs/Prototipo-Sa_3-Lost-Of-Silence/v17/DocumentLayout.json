@@ -1,10 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\deivy_guzman\\Prototipo-Sa_3-Lost-Of-Silence\\",
+  "WorkspaceRootPath": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\deivy_guzman\\Prototipo-Sa_3-Lost-Of-Silence\\Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|c:\\users\\maicon_v_machado\\documents\\github\\prototipo-sa_3-lost-of-silence\\assets\\lostofsilence\\scripts\\doorinteractable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|solutionrelative:assets\\lostofsilence\\scripts\\doorinteractable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|c:\\users\\maicon_v_machado\\documents\\github\\prototipo-sa_3-lost-of-silence\\assets\\lostofsilence\\scripts\\enemycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|solutionrelative:assets\\lostofsilence\\scripts\\enemycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|c:\\users\\maicon_v_machado\\documents\\github\\prototipo-sa_3-lost-of-silence\\assets\\lostofsilence\\scripts\\mannequinaudio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85A0300B-FB4D-497E-0C89-858DC2285149}|Assembly-CSharp.csproj|solutionrelative:assets\\lostofsilence\\scripts\\mannequinaudio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +27,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Lit.shader",
-              "DocumentMoniker": "C:\\Users\\deivy_guzman\\Prototipo-Sa_3-Lost-Of-Silence\\Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader",
-              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader",
-              "ToolTip": "C:\\Users\\deivy_guzman\\Prototipo-Sa_3-Lost-Of-Silence\\Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader",
-              "RelativeToolTip": "Library\\PackageCache\\com.unity.render-pipelines.universal@1e87cf1dccb8\\Shaders\\Lit.shader",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
-              "WhenOpened": "2026-10-08T17:54:46.689Z",
+              "Title": "DoorInteractable.cs",
+              "DocumentMoniker": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\DoorInteractable.cs",
+              "RelativeDocumentMoniker": "Assets\\LostOfSilence\\Scripts\\DoorInteractable.cs",
+              "ToolTip": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\DoorInteractable.cs",
+              "RelativeToolTip": "Assets\\LostOfSilence\\Scripts\\DoorInteractable.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAiwBUAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-20T19:26:35.198Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EnemyController.cs",
+              "DocumentMoniker": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\EnemyController.cs",
+              "RelativeDocumentMoniker": "Assets\\LostOfSilence\\Scripts\\EnemyController.cs",
+              "ToolTip": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\EnemyController.cs",
+              "RelativeToolTip": "Assets\\LostOfSilence\\Scripts\\EnemyController.cs",
+              "ViewState": "AgIAAEsBAAAAAAAAAAAwwGwBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-20T19:10:39.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MannequinAudio.cs",
+              "DocumentMoniker": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\MannequinAudio.cs",
+              "RelativeDocumentMoniker": "Assets\\LostOfSilence\\Scripts\\MannequinAudio.cs",
+              "ToolTip": "C:\\Users\\maicon_v_machado\\Documents\\GitHub\\Prototipo-Sa_3-Lost-Of-Silence\\Assets\\LostOfSilence\\Scripts\\MannequinAudio.cs",
+              "RelativeToolTip": "Assets\\LostOfSilence\\Scripts\\MannequinAudio.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAwwCsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-20T19:09:50.011Z",
               "EditorCaption": ""
             }
           ]
