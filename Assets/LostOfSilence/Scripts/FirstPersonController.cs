@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -24,6 +25,13 @@ namespace LostOfSilence
         [SerializeField] private float staminaDrain = 1f;
         [SerializeField] private float staminaRecover = 0.65f;
 
+        [Header("Footstep Audio")]
+        [SerializeField] private AudioClip footstepClip;
+        [SerializeField] private AudioSource footstepAudioSource;
+        [SerializeField, Range(0f, 1f)] private float footstepVolume = 0.65f;
+        [SerializeField] private float walkStepInterval = 0.50f;
+        [SerializeField] private float runStepInterval = 0.30f;
+
         private CharacterController characterController;
         private float verticalVelocity;
         private float cameraPitch;
@@ -33,19 +41,24 @@ namespace LostOfSilence
         private Vector3 standingCenter;
         private float baseMouseSensitivity;
         private float baseTouchLookSensitivity;
+        private float stepTimer;
 
         private int moveTouchId = -1;
         private int lookTouchId = -1;
         private Vector2 moveTouchStart;
         private Vector2 mobileMove;
 
+        private bool isRunning;
+
         public bool IsHidden { get; private set; }
-        public float Stamina01 => maxStamina <= 0f ? 1f : stamina / maxStamina;
+        public float Stamina01 =>
+            maxStamina <= 0f ? 1f : stamina / maxStamina;
 
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
             stamina = maxStamina;
+
             standingHeight = characterController.height;
             standingCenter = characterController.center;
             baseMouseSensitivity = mouseSensitivity;
@@ -55,6 +68,20 @@ namespace LostOfSilence
             {
                 cameraRoot = Camera.main.transform;
             }
+
+            if (footstepAudioSource == null)
+            {
+                footstepAudioSource = GetComponent<AudioSource>();
+            }
+
+            if (footstepAudioSource == null)
+            {
+                footstepAudioSource = gameObject.AddComponent<AudioSource>();
+            }
+
+            footstepAudioSource.playOnAwake = false;
+            footstepAudioSource.loop = false;
+            footstepAudioSource.spatialBlend = 0f;
         }
 
         private void Start()
@@ -67,6 +94,7 @@ namespace LostOfSilence
         {
             if (transform.position.y < fallRespawnY)
             {
+                StopFootsteps();
                 GameManager.Instance?.RespawnPlayer();
                 return;
             }
@@ -76,6 +104,11 @@ namespace LostOfSilence
                 Move();
                 Look(ReadLookDelta());
             }
+            else
+            {
+                isRunning = false;
+                StopFootsteps();
+            }
 
             GameManager.Instance?.UpdateStamina(Stamina01);
         }
@@ -83,24 +116,54 @@ namespace LostOfSilence
         private void Move()
         {
             Vector2 moveInput = ReadMoveInput();
-            bool wantsRun = Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed && moveInput.y > 0.05f;
-            bool crouching = Keyboard.current != null && Keyboard.current.leftCtrlKey.isPressed;
+
+            bool wantsRun =
+                Keyboard.current != null &&
+                Keyboard.current.leftShiftKey.isPressed &&
+                moveInput.y > 0.05f;
+
+            bool crouching =
+                Keyboard.current != null &&
+                Keyboard.current.leftCtrlKey.isPressed;
+
             float speed = crouching ? crouchSpeed : walkSpeed;
+            isRunning = false;
 
             if (wantsRun && stamina > 0.1f && !crouching)
             {
                 speed = runSpeed;
-                stamina = Mathf.Max(0f, stamina - staminaDrain * Time.deltaTime);
+                isRunning = true;
+                stamina = Mathf.Max(
+                    0f,
+                    stamina - staminaDrain * Time.deltaTime
+                );
             }
             else
             {
-                stamina = Mathf.Min(maxStamina, stamina + staminaRecover * Time.deltaTime);
+                stamina = Mathf.Min(
+                    maxStamina,
+                    stamina + staminaRecover * Time.deltaTime
+                );
             }
 
-            characterController.height = Mathf.Lerp(characterController.height, crouching ? 1.15f : standingHeight, 10f * Time.deltaTime);
-            characterController.center = Vector3.Lerp(characterController.center, crouching ? new Vector3(0f, 0.58f, 0f) : standingCenter, 10f * Time.deltaTime);
+            characterController.height = Mathf.Lerp(
+                characterController.height,
+                crouching ? 1.15f : standingHeight,
+                10f * Time.deltaTime
+            );
 
-            Vector3 movement = transform.right * moveInput.x + transform.forward * moveInput.y;
+            characterController.center = Vector3.Lerp(
+                characterController.center,
+                crouching
+                    ? new Vector3(0f, 0.58f, 0f)
+                    : standingCenter,
+                10f * Time.deltaTime
+            );
+
+            Vector3 movement =
+                transform.right * moveInput.x +
+                transform.forward * moveInput.y;
+
             movement = Vector3.ClampMagnitude(movement, 1f) * speed;
 
             if (characterController.isGrounded && verticalVelocity < 0f)
@@ -110,7 +173,48 @@ namespace LostOfSilence
 
             verticalVelocity += gravity * Time.deltaTime;
             movement.y = verticalVelocity;
+
             characterController.Move(movement * Time.deltaTime);
+
+            UpdateFootsteps();
+        }
+
+        private void UpdateFootsteps()
+        {
+            Vector3 horizontalVelocity = characterController.velocity;
+            horizontalVelocity.y = 0f;
+
+            bool movingOnGround =
+                characterController.isGrounded &&
+                horizontalVelocity.magnitude > 0.15f;
+
+            if (!movingOnGround || footstepClip == null ||
+                footstepAudioSource == null)
+            {
+                StopFootsteps();
+                return;
+            }
+
+            float interval = isRunning
+                ? runStepInterval
+                : walkStepInterval;
+
+            stepTimer -= Time.deltaTime;
+
+            if (stepTimer <= 0f)
+            {
+                footstepAudioSource.PlayOneShot(
+                    footstepClip,
+                    footstepVolume
+                );
+
+                stepTimer = interval;
+            }
+        }
+
+        private void StopFootsteps()
+        {
+            stepTimer = 0f;
         }
 
         private Vector2 ReadMoveInput()
@@ -128,15 +232,18 @@ namespace LostOfSilence
 
             UpdateTouchInput();
             input += mobileMove;
+
             return Vector2.ClampMagnitude(input, 1f);
         }
 
         private Vector2 ReadLookDelta()
         {
             Vector2 delta = Vector2.zero;
+
             if (Mouse.current != null)
             {
-                delta += Mouse.current.delta.ReadValue() * mouseSensitivity;
+                delta += Mouse.current.delta.ReadValue()
+                    * mouseSensitivity;
             }
 
             if (Touchscreen.current != null && lookTouchId >= 0)
@@ -145,7 +252,8 @@ namespace LostOfSilence
                 {
                     if (touch.touchId.ReadValue() == lookTouchId)
                     {
-                        delta += touch.delta.ReadValue() * touchLookSensitivity;
+                        delta += touch.delta.ReadValue()
+                            * touchLookSensitivity;
                         break;
                     }
                 }
@@ -158,6 +266,7 @@ namespace LostOfSilence
         {
             mobileMove = Vector2.zero;
             Touchscreen touchscreen = Touchscreen.current;
+
             if (touchscreen == null)
             {
                 moveTouchId = -1;
@@ -181,20 +290,26 @@ namespace LostOfSilence
                 if (id == moveTouchId)
                 {
                     moveTouchAlive = true;
+
                     Vector2 offset = position - moveTouchStart;
-                    mobileMove = Vector2.ClampMagnitude(offset / 85f, 1f);
+                    mobileMove = Vector2.ClampMagnitude(
+                        offset / 85f,
+                        1f
+                    );
                 }
                 else if (id == lookTouchId)
                 {
                     lookTouchAlive = true;
                 }
-                else if (position.x < Screen.width * 0.45f && moveTouchId < 0)
+                else if (position.x < Screen.width * 0.45f &&
+                         moveTouchId < 0)
                 {
                     moveTouchId = id;
                     moveTouchStart = position;
                     moveTouchAlive = true;
                 }
-                else if (position.x > Screen.width * 0.55f && lookTouchId < 0)
+                else if (position.x > Screen.width * 0.55f &&
+                         lookTouchId < 0)
                 {
                     lookTouchId = id;
                     lookTouchAlive = true;
@@ -208,20 +323,29 @@ namespace LostOfSilence
         private void Look(Vector2 delta)
         {
             transform.Rotate(Vector3.up * delta.x);
-            cameraPitch = Mathf.Clamp(cameraPitch - delta.y, -80f, 80f);
+
+            cameraPitch = Mathf.Clamp(
+                cameraPitch - delta.y,
+                -80f,
+                80f
+            );
 
             if (cameraRoot != null)
             {
-                cameraRoot.localEulerAngles = new Vector3(cameraPitch, 0f, 0f);
+                cameraRoot.localEulerAngles =
+                    new Vector3(cameraPitch, 0f, 0f);
             }
         }
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             characterController.enabled = false;
+
             transform.SetPositionAndRotation(position, rotation);
             verticalVelocity = 0f;
+
             characterController.enabled = true;
+            StopFootsteps();
         }
 
         public void SetHidden(bool hidden, Transform hidePoint = null)
@@ -233,16 +357,27 @@ namespace LostOfSilence
             {
                 Teleport(hidePoint.position, hidePoint.rotation);
             }
+
+            if (hidden)
+            {
+                StopFootsteps();
+            }
         }
 
         public void SetFrozen(bool value)
         {
             frozen = value;
+
+            if (value)
+            {
+                StopFootsteps();
+            }
         }
 
         public void SetLookSensitivity(float multiplier)
         {
             float clamped = Mathf.Clamp(multiplier, 0.35f, 2.5f);
+
             mouseSensitivity = baseMouseSensitivity * clamped;
             touchLookSensitivity = baseTouchLookSensitivity * clamped;
         }
